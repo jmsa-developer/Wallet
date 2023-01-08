@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
@@ -13,67 +14,76 @@ class Client
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[ORM\Column(length: 20)]
-    private ?string $identity_number = null;
+    private ?string $Documento = null;
 
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[ORM\Column(length: 60)]
-    private ?string $name = null;
+    private ?string $Nombres = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    #[Assert\NotNull]
     #[ORM\Column(length: 80)]
-    private ?string $email = null;
+    private ?string $Email = null;
 
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[ORM\Column(length: 30)]
-    private ?string $contact_number = null;
+    private ?string $Celular = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdentityNumber(): ?string
+    public function getDocumento(): ?string
     {
-        return $this->identity_number;
+        return $this->Documento;
     }
 
-    public function setIdentityNumber(string $identity_number): self
+    public function setDocumento(string $documento): self
     {
-        $this->identity_number = $identity_number;
+        $this->Documento = $documento;
 
         return $this;
     }
 
-    public function getName(): ?string
+    public function getNombres(): ?string
     {
-        return $this->name;
+        return $this->Nombres;
     }
 
-    public function setName(string $name): self
+    public function setNombres(string $nombres): self
     {
-        $this->name = $name;
+        $this->Nombres = $nombres;
 
         return $this;
     }
 
     public function getEmail(): ?string
     {
-        return $this->email;
+        return $this->Email;
     }
 
     public function setEmail(string $email): self
     {
-        $this->email = $email;
+        $this->Email = $email;
 
         return $this;
     }
 
-    public function getContactNumber(): ?string
+    public function getCelular(): ?string
     {
-        return $this->contact_number;
+        return $this->Celular;
     }
 
-    public function setContactNumber(string $contact_number): self
+    public function setCelular(string $celular): self
     {
-        $this->contact_number = $contact_number;
+        $this->Celular = $celular;
 
         return $this;
     }

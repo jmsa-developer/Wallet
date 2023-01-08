@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Epayco" targetNamespace="http://127.0.0.1:8000/epayco?wsdl" xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="http://127.0.0.1:8000/epayco?wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/">
+    <!--  create wsdl for create client  -->
+    <types>
+        <xsd:schema targetNamespace="http://127.0.0.1:8000/epayco?wsdl">
+            <xsd:element name="registro_cliente">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Documento" type="xsd:string" minOccurs="1"/>
+                        <xsd:element name="Nombres" type="xsd:string" minOccurs="1"/>
+                        <xsd:element name="Email" type="xsd:string" minOccurs="1"/>
+                        <xsd:element name="Celular" type="xsd:string" minOccurs="1"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="registro_cliente_response">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="success" type="xsd:boolean"/>
+                        <xsd:element name="cod_error" type="xsd:string"/>
+                        <xsd:element name="message_error" wsdl:arrayType="xsd:string[]" />
+
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+        </xsd:schema>
+    </types>
+    <message name="registro_cliente">
+        <part name="parameters" element="tns:registro_cliente"/>
+    </message>
+    <message name="registro_cliente_response">
+        <part name="parameters" element="tns:registro_cliente_response"/>
+    </message>
+    <portType name="EpaycoPort">
+        <operation name="registro_cliente">
+            <input message="tns:registro_cliente"/>
+            <output message="tns:registro_cliente_response"/>
+        </operation>
+    </portType>
+    <binding name="EpaycoBinding" type="tns:EpaycoPort">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="registro_cliente">
+            <soap:operation soapAction="http://127.0.0.1:8000/epayco?wsdl#registro_cliente" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="http://127.0.0.1:8000/epayco?wsdl"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:http://127.0.0.1:8000/epayco?wsdl"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="EpaycoService">
+        <port name="EpaycoPort" binding="tns:EpaycoBinding">
+            <soap:address location="http://127.0.0.1:8000/epayco"/>
+        </port>
+    </service>
+</definitions>

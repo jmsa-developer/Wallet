@@ -23,7 +23,7 @@ class Wallet
 
     #[ORM\OneToOne(inversedBy: 'wallet', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Client $client_id = null;
+    private ?Client $client = null;
 
     public function getId(): ?int
     {
@@ -42,14 +42,14 @@ class Wallet
         return $this;
     }
 
-    public function getClientId(): ?Client
+    public function getClient(): ?Client
     {
-        return $this->client_id;
+        return $this->client;
     }
 
-    public function setClientId(Client $client_id): self
+    public function setClient(Client $client): self
     {
-        $this->client_id = $client_id;
+        $this->client = $client;
 
         return $this;
     }

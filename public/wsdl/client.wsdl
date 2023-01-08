@@ -45,6 +45,25 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="pagar">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Documento" type="xsd:string" minOccurs="1"/>
+                        <xsd:element name="Celular" type="xsd:string" minOccurs="1"/>
+                        <xsd:element name="Orden" type="xsd:string" minOccurs="1"/>
+                        <xsd:element name="Valor" type="xsd:decimal" minOccurs="1"/>
+
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="confirmar_pago">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Sesion" type="xsd:string" minOccurs="1"/>
+                        <xsd:element name="Token" type="xsd:string" minOccurs="1"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
         </xsd:schema>
     </types>
     <message name="registro_cliente">
@@ -59,6 +78,12 @@
     <message name="consultar_saldo">
         <part name="parameters" element="tns:consultar_saldo"/>
     </message>
+    <message name="pagar">
+        <part name="parameters" element="tns:pagar"/>
+    </message>
+    <message name="confirmar_pago">
+        <part name="parameters" element="tns:confirmar_pago"/>
+    </message>
     <portType name="EpaycoPort">
         <operation name="registro_cliente">
             <input message="tns:registro_cliente"/>
@@ -70,6 +95,14 @@
         </operation>
         <operation name="consultar_saldo">
             <input message="tns:consultar_saldo"/>
+            <output message="tns:response"/>
+        </operation>
+        <operation name="pagar">
+            <input message="tns:pagar"/>
+            <output message="tns:response"/>
+        </operation>
+        <operation name="confirmar_pago">
+            <input message="tns:confirmar_pago"/>
             <output message="tns:response"/>
         </operation>
     </portType>
@@ -99,6 +132,28 @@
         </operation>
         <operation name="consultar_saldo">
             <soap:operation soapAction="http://127.0.0.1:8000/epayco?wsdl#consultar_saldo" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="http://127.0.0.1:8000/epayco?wsdl"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:http://127.0.0.1:8000/epayco?wsdl"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="pagar">
+            <soap:operation soapAction="http://127.0.0.1:8000/epayco?wsdl#pagar" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="http://127.0.0.1:8000/epayco?wsdl"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:http://127.0.0.1:8000/epayco?wsdl"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="confirmar_pago">
+            <soap:operation soapAction="http://127.0.0.1:8000/epayco?wsdl#confirmar_pago" style="rpc"/>
             <input>
                 <soap:body use="encoded" namespace="http://127.0.0.1:8000/epayco?wsdl"
                            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>

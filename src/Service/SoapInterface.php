@@ -11,6 +11,8 @@ interface SoapInterface
     const SUCCESS = '00';
     const ERROR_PROPERTY = '01';
     const ERROR_NOT_FOUND = '02';
+    const ERROR_NOT_ENOUGH_BALANCE = '03';
+    const ERROR_ORDER_ALLREADY_PAID = '04';
 
 
 

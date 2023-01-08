@@ -81,6 +81,22 @@ class ClientService implements SoapInterface
 
     }
 
+    public function consultar_saldo($data)
+    {
+        $client = $this->entityManager->getRepository(Client::class)->findOneBy(
+            [
+                'Documento' => $data->Documento,
+                'Celular' => $data->Celular,
+            ]);
+
+        if (!$client) {
+            return $this->createResponse(false, self::ERROR_NOT_FOUND, 'El cliente no existe');
+        }
+
+        return $this->createResponse(true, self::SUCCESS, $client->getWallet()->getBalance());
+    }
+
+
     private function validateRecargaBilletera($data)
     {
         if (!is_numeric($data->Valor)) {

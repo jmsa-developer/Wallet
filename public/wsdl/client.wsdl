@@ -37,6 +37,14 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="consultar_saldo">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Documento" type="xsd:string" minOccurs="1"/>
+                        <xsd:element name="Celular" type="xsd:string" minOccurs="1"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
         </xsd:schema>
     </types>
     <message name="registro_cliente">
@@ -48,7 +56,9 @@
     <message name="recarga_billetera">
         <part name="parameters" element="tns:recarga_billetera"/>
     </message>
-
+    <message name="consultar_saldo">
+        <part name="parameters" element="tns:consultar_saldo"/>
+    </message>
     <portType name="EpaycoPort">
         <operation name="registro_cliente">
             <input message="tns:registro_cliente"/>
@@ -56,6 +66,10 @@
         </operation>
         <operation name="recarga_billetera">
             <input message="tns:recarga_billetera"/>
+            <output message="tns:response"/>
+        </operation>
+        <operation name="consultar_saldo">
+            <input message="tns:consultar_saldo"/>
             <output message="tns:response"/>
         </operation>
     </portType>
@@ -83,6 +97,18 @@
                            encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
             </output>
         </operation>
+        <operation name="consultar_saldo">
+            <soap:operation soapAction="http://127.0.0.1:8000/epayco?wsdl#consultar_saldo" style="rpc"/>
+            <input>
+                <soap:body use="encoded" namespace="http://127.0.0.1:8000/epayco?wsdl"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:http://127.0.0.1:8000/epayco?wsdl"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
     </binding>
     <service name="EpaycoService">
         <port name="EpaycoPort" binding="tns:EpaycoBinding">

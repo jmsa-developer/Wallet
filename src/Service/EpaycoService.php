@@ -6,18 +6,20 @@ use App\Entity\Client;
 use App\Entity\Order;
 use App\Entity\Wallet;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EpaycoService implements SoapInterface
 {
     private $entityManager;
     private $validator;
+    private $mailer;
 
-    public function __construct(ManagerRegistry $doctrine, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $doctrine, ValidatorInterface $validator, MailerInterface $mailer)
     {
         $this->entityManager = $doctrine->getManager();
         $this->validator = $validator;
+        $this->mailer = $mailer;
     }
 
     public function registro_cliente($data)
@@ -69,6 +71,10 @@ class EpaycoService implements SoapInterface
             return $this->createResponse(false, self::ERROR_NOT_FOUND, 'El cliente no existe');
         }
 
+        if (!property_exists($data, 'Valor')) {
+            return $this->createResponse(false, self::ERROR_PROPERTY, 'El valor de la recarga no puede ser 0');
+        }
+
         $wallet = $client->getWallet();
         $wallet->setBalance($wallet->getBalance() + $data->Valor);
 
@@ -106,11 +112,11 @@ class EpaycoService implements SoapInterface
             return $this->createResponse(false, self::ERROR_NOT_FOUND, 'El cliente no existe');
         }
 
-        if($client->getWallet()->getBalance() < $data->Valor){
+        if ($client->getWallet()->getBalance() < $data->Valor) {
             return $this->createResponse(false, self::ERROR_NOT_ENOUGH_BALANCE, 'Saldo insuficiente');
         }
 
-        if($data->Orden === ''){
+        if ($data->Orden === '') {
             return $this->createResponse(false, self::ERROR_PROPERTY, 'La orden es requerida');
         }
 
@@ -120,9 +126,9 @@ class EpaycoService implements SoapInterface
                 'client' => $client,
             ]);
 
-        if($order){
+        if ($order) {
 
-            if($order->getStatus() == Order::STATUS_PAID){
+            if ($order->getStatus() == Order::STATUS_PAID) {
                 return $this->createResponse(false, self::ERROR_ORDER_ALLREADY_PAID, 'La orden ya fue pagada');
             }
 
@@ -142,8 +148,8 @@ class EpaycoService implements SoapInterface
         $this->entityManager->flush();
 
         if ($order->getId()) {
-            //$order->sendToken($this->mailer);
-            return $this->createResponse(true, self::SUCCESS, ['Se ha enviado un correo con el token de su compra ','Este es el numero de sesion de su compra'.$order->getSessionId()]);
+            $order->sendToken($this->mailer);
+            return $this->createResponse(true, self::SUCCESS, ['Se ha enviado un correo con el token de su compra ', 'Este es el numero de sesion de su compra ' . $order->getSessionId()]);
         }
 
         return $this->createResponse(false, $this->entityManager->getConnection()->errorCode(), $this->entityManager->getConnection()->errorInfo());
@@ -162,7 +168,7 @@ class EpaycoService implements SoapInterface
             return $this->createResponse(false, self::ERROR_NOT_FOUND, 'La orden no existe');
         }
 
-        if($order->getStatus() == Order::STATUS_PAID){
+        if ($order->getStatus() == Order::STATUS_PAID) {
             return $this->createResponse(false, self::ERROR_ORDER_ALLREADY_PAID, 'La orden ya fue pagada');
         }
         $client = $order->getClient();

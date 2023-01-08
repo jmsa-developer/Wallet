@@ -4,7 +4,8 @@
              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/">
+             xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://www.w3.org/1999/XSL/Transform">
     <!--  create wsdl for create client  -->
     <types>
         <xsd:schema targetNamespace="http://127.0.0.1:8000/epayco?wsdl">
